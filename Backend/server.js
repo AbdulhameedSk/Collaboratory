@@ -7,7 +7,6 @@ const connectDB = require("../Backend/db/connect");
 const app = express();
 dotenv.config();
 connectDB();
-//middlewares
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
