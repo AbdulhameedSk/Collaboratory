@@ -10,7 +10,7 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
-const userRoutes = require("./routes/userRoutes.js").default;
+const userRoutes = require("./routes/userRoutes.js");
 const projectRoutes = require("./routes/projectRoutes.js");
 
 app.use("/api/v1/user", userRoutes);
