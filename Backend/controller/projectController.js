@@ -3,7 +3,7 @@ const projectModel = require("../models/projectModel.js");
 const userModel = require("../models/userModel.js");
 exports.getAllprojectsController = async (req, res) => {
   try {
-    const projects = await projectModel.find({}).populate('user');
+    const projects = await projectModel.find({}).populate("user");
     if (!projects || projects.length === 0) {
       return res.status(200).send({
         success: true,
@@ -19,7 +19,7 @@ exports.getAllprojectsController = async (req, res) => {
   } catch (error) {
     return res.status(404).send({
       success: false,
-      msg: "ERROR WHILE GETTING projectS",
+      msg: "ERROR WHILE GETTING PROJECTS",
       error: error.message,
     });
   }
@@ -54,7 +54,7 @@ exports.createprojectController = async (req, res) => {
     await session.commitTransaction();
 
     return res.status(200).send({
-      success:true,
+      success: true,
       newproject,
     });
   } catch (error) {
@@ -86,9 +86,13 @@ exports.updateprojectController = async (req, res) => {
     if (image) updateFields.image = image;
 
     // Find and update the project by ID
-    const updatedproject = await projectModel.findByIdAndUpdate(id, updateFields, {
-      new: true,
-    });
+    const updatedproject = await projectModel.findByIdAndUpdate(
+      id,
+      updateFields,
+      {
+        new: true,
+      }
+    );
 
     // Check if the project with the provided ID exists
     if (!updatedproject) {
@@ -124,7 +128,7 @@ exports.getprojectById = async (req, res) => {
       });
     }
     return res.status(200).send({
-      success:true,
+      success: true,
       project,
     });
   } catch (error) {
@@ -137,13 +141,12 @@ exports.getprojectById = async (req, res) => {
 exports.deleteprojectController = async (req, res) => {
   try {
     const id = req.params.id;
-    const project = await projectModel
-    // .findByIdAndDelete(id).populate("user");
-    .findByIdAndDelete(id).populate("user");
-    await project.user.projects.pull(project);
+    const project = await projectModel.findByIdAndDelete(id).populate("user");
+    await project.user.projectModel.pull(project);
+    //await project.user.project.pull(project);
     await project.user.save();
     return res.status(200).send({
-      success:true,
+      success: true,
       msg: "Deleted Successfully",
       data: project,
     });
@@ -156,7 +159,9 @@ exports.deleteprojectController = async (req, res) => {
 };
 exports.userprojectController = async (req, res) => {
   try {
-    const userproject = await userModel.findById(req.params.id).populate("projects");
+    const userproject = await userModel
+      .findById(req.params.id)
+      .populate("projects");
     if (!userproject) {
       return res.status(404).send({
         success: false,
@@ -174,6 +179,29 @@ exports.userprojectController = async (req, res) => {
       success: false,
       message: "Error in userprojectController",
       error,
+    });
+  }
+};
+exports.getCompleted = async (req, res) => {
+  try {
+    const projects = await projectModel.find({ status: true });
+    if (!projects) {
+      return res.status(200).send({
+        success: true,
+        msg: "No projects are completed",
+      });
+    }
+    return res.status(200).send({
+      success: true,
+      msg: "GOT",
+      projectCount: projects.length,
+      projects,
+    });
+  } catch (error) {
+    return res.status(404).send({
+      success: false,
+      msg: "ERROR WHILE GETTING projectS",
+      error: error.message,
     });
   }
 };
