@@ -3,15 +3,15 @@ const cors = require("cors");
 const morgan = require("morgan");
 const colors = require("colors");
 const dotenv = require("dotenv");
-const connectDB = require("../Backend/db/connect");
+const connectDB = require("../Backend/db/connect.js");
 const app = express();
 dotenv.config();
 connectDB();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
-const userRoutes = require("./routes/userRoutes.js");
-const projectRoutes = require("./routes/projectRoutes");
+const userRoutes = require("./routes/userRoutes.js").default;
+const projectRoutes = require("./routes/projectRoutes.js");
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/projects", projectRoutes);

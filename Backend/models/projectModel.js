@@ -15,8 +15,8 @@ const projectSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
   },
 });
-const project = mongoose.model("project", projectSchema);
-export default Project;
+const projectModel = mongoose.model("Project", projectSchema);
+module.exports = projectModel;

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const projectModel = require("../models/projectModel.js");
-const userModel = require("../models/userModels.js");
+const userModel = require("../models/userModel.js");
 exports.getAllprojectsController = async (req, res) => {
   try {
     const projects = await projectModel.find({}).populate('user');
